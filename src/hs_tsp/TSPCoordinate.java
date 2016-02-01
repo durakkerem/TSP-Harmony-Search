@@ -9,12 +9,19 @@ public class TSPCoordinate {
   
   private double x;
   private double y;
-
-  public TSPCoordinate(double x, double y) {
+  private double fitnessValue;
+  private TSPCoordinate[] neighbors;
+  public TSPCoordinate(double x, double y, double fitness) {
     this.x = x;
     this.y = y;
+    this.fitnessValue = fitness;
   }
 
   public double getX() { return this.x; }
   public double getY() { return this.y; }
+    public double getFitness() { return this.fitnessValue; }
+    public void updateFitness(double fitness){
+    this.fitnessValue = fitness;
+    }
+
 }

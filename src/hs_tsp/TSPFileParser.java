@@ -40,7 +40,7 @@ public class TSPFileParser {
   public boolean isTSPFileIn() { return this.isTSPFileIn; }
   public int [][] getGraph() { return this.graph; }
   public double [][] cityValues = new double[populationSize][populationSize]; // population size değiştirilebilir?
-  public Vector parseFile(String fileName) throws TSPException {
+  public Vector parseFile() throws TSPException {
 
     // Supported file types
     int EUC_2D = 1;
@@ -50,7 +50,7 @@ public class TSPFileParser {
     int fileType = 0;
     
     try {
-      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      BufferedReader in = new BufferedReader(new FileReader(this.fileName));
       String line;
       boolean nodeCoordSection = false;
       
@@ -82,7 +82,7 @@ public class TSPFileParser {
 		double y = Double.valueOf( strTok.nextToken() ).doubleValue();
              //   System.out.println(y);
 
-		coords.addElement(new TSPCoordinate(x,y));
+		coords.addElement(new TSPCoordinate(x,y,0));
 	      } else
 		throw new TSPException( "Unrecognized file format!" );
 	    } catch(NoSuchElementException e) {
