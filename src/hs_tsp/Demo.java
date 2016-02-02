@@ -16,7 +16,8 @@ public class Demo  {
      HS_TSP hs = new HS_TSP("berlin52.tsp");
      //hs.setPAR(0.2);
      //hs.setHMCR(0.4);
-    hs.generateHM(hs.getCoordVector());
+   // hs.generateHM(hs.getCoordVector());
+    hs.createCityNetwork(hs.getCoordVector());
    
     }
     
