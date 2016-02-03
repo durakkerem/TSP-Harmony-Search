@@ -96,7 +96,7 @@ public class HS_TSP {
             HarmonyMemory[i][numberOfCities] = routeFitness;  // save the current fitness
 
         }
-
+        System.out.println("Harmony Vector is created.");
     }
 
     public void setPAR(double PAR) {
@@ -133,6 +133,7 @@ public class HS_TSP {
         int current = 1;
         Random random = new Random();
         while (current < maxIter) {
+                newHarmony = new TSPCoordinate[numberOfCities+1]; //go on here
 
             for (int i = 0; i < numberOfCities; i++) {
                 double pHMCR = random.nextDouble(); // generate local probability value for HMCR. (double between 0 and 1) 
@@ -152,8 +153,8 @@ public class HS_TSP {
                     }
                 } else {
 
-                    int randomRoute = (int) (Math.random() * (HMS));
-                    Point tempPoint = new Point(randomRoute, i);
+                 //   int randomRoute = (int) (Math.random() * (HMS));
+                  //  Point tempPoint = new Point(randomRoute, i);
                     newHarmony[i] = randomSelection();
                     //   System.out.println("i: "+i);
 
@@ -168,7 +169,8 @@ public class HS_TSP {
  public Vector getCoordVector() {
         return coords;
     }
-    public void calculateFitnessForRoute() {
+   
+ public void calculateFitnessForRoute() {
         double sumOfFitness = 0.0;
         for (int i = 1; i < numberOfCities; i++) {
             TSPCoordinate tempCurrent = (TSPCoordinate) newHarmony[i];
@@ -178,24 +180,36 @@ public class HS_TSP {
 
         }
         newHarmony[numberOfCities] = new TSPCoordinate(0, 0, 0);
-        ((TSPCoordinate) newHarmony[numberOfCities]).updateFitness(sumOfFitness);
+        newHarmony[numberOfCities].updateFitness(sumOfFitness);
 
-        System.out.println("new harmony fitness: " + sumOfFitness);
+        System.out.println("newly created: " + sumOfFitness);
 
         if (sumOfFitness < worstFitness.getY()) {
 
             for (int i = 0; i < numberOfCities; i++) {
-
+                // Replace the route for the worst fitness with the newHarmony vector. But this time, new worstfitness should be recalculated. see below method call. 
                 HarmonyMemory[(int) worstFitness.getX()][i] = newHarmony[i];
 
             }
-
+            
             (HarmonyMemory[(int) worstFitness.getX()][numberOfCities]).updateFitness(sumOfFitness);
+          //  worstFitness = new Point((int) worstFitness.getX(), (int) sumOfFitness);
             System.out.println("new fitness: "+HarmonyMemory[(int) worstFitness.getX()][numberOfCities].getFitness());
             updateFitnessHistory();
+            
+            printHarmonyVector();
 
         }
 
+    }
+    
+    public void printHarmonyVector(){
+         for (int i = 0; i < HMS; i++) { //outer, one complete
+            
+             System.out.println("FITNESS: "+ HarmonyMemory[i][numberOfCities].getFitness());
+            
+            
+         }
     }
 
     public double calculateDistance(TSPCoordinate t1, TSPCoordinate t2) {
@@ -239,7 +253,16 @@ public class HS_TSP {
         for (int i = 0;i <HMS;i++){
         
        tempArray[i] = HarmonyMemory[i][numberOfCities];
-        
+           // System.out.println("Worst fitness: "+worstFitness.getY()+" and current fitness: "+ tempArray[i].getFitness());
+            
+            if(tempArray[i].getFitness() < worstFitness.getY()){
+            
+           // worstFitness.getY() = tempArray[i].getFitness();
+           worstFitness = new Point(i, (int)tempArray[i].getFitness());
+                System.out.println("new worst fitness: "+ worstFitness.getY());
+            
+            }
+       
         }
            
     
@@ -278,65 +301,3 @@ public class HS_TSP {
 
     }
 }
-/*
-    
- public void calculateARoute(){
- double total = 0.0;
-    
- total+= calculateDistance(((TSPCoordinate) coords.get(1)), ((TSPCoordinate) coords.get(49)));
- total+= calculateDistance(((TSPCoordinate) coords.get(49)), ((TSPCoordinate) coords.get(32)));
- total+= calculateDistance(((TSPCoordinate) coords.get(32)), ((TSPCoordinate) coords.get(45)));
- total+= calculateDistance(((TSPCoordinate) coords.get(19)), ((TSPCoordinate) coords.get(45)));
- total+= calculateDistance(((TSPCoordinate) coords.get(19)), ((TSPCoordinate) coords.get(41)));
- total+= calculateDistance(((TSPCoordinate) coords.get(8)), ((TSPCoordinate) coords.get(41)));
- total+= calculateDistance(((TSPCoordinate) coords.get(8)), ((TSPCoordinate) coords.get(9)));
- total+= calculateDistance(((TSPCoordinate) coords.get(10)), ((TSPCoordinate) coords.get(9)));
- total+= calculateDistance(((TSPCoordinate) coords.get(10)), ((TSPCoordinate) coords.get(43)));
- total+= calculateDistance(((TSPCoordinate) coords.get(43)), ((TSPCoordinate) coords.get(33)));
- total+= calculateDistance(((TSPCoordinate) coords.get(33)), ((TSPCoordinate) coords.get(51)));
- total+= calculateDistance(((TSPCoordinate) coords.get(11)), ((TSPCoordinate) coords.get(51)));
- total+= calculateDistance(((TSPCoordinate) coords.get(11)), ((TSPCoordinate) coords.get(52)));
- total+= calculateDistance(((TSPCoordinate) coords.get(14)), ((TSPCoordinate) coords.get(52)));
- total+= calculateDistance(((TSPCoordinate) coords.get(14)), ((TSPCoordinate) coords.get(13)));
- total+= calculateDistance(((TSPCoordinate) coords.get(47)), ((TSPCoordinate) coords.get(13)));
- total+= calculateDistance(((TSPCoordinate) coords.get(47)), ((TSPCoordinate) coords.get(26)));
- total+= calculateDistance(((TSPCoordinate) coords.get(27)), ((TSPCoordinate) coords.get(26)));
- total+= calculateDistance(((TSPCoordinate) coords.get(27)), ((TSPCoordinate) coords.get(28)));
- total+= calculateDistance(((TSPCoordinate) coords.get(12)), ((TSPCoordinate) coords.get(28)));
- total+= calculateDistance(((TSPCoordinate) coords.get(12)), ((TSPCoordinate) coords.get(25)));
- total+= calculateDistance(((TSPCoordinate) coords.get(4)), ((TSPCoordinate) coords.get(25)));
- total+= calculateDistance(((TSPCoordinate) coords.get(4)), ((TSPCoordinate) coords.get(6)));
- total+= calculateDistance(((TSPCoordinate) coords.get(15)), ((TSPCoordinate) coords.get(6)));
- total+= calculateDistance(((TSPCoordinate) coords.get(15)), ((TSPCoordinate) coords.get(5)));
- total+= calculateDistance(((TSPCoordinate) coords.get(24)), ((TSPCoordinate) coords.get(5)));
- total+= calculateDistance(((TSPCoordinate) coords.get(24)), ((TSPCoordinate) coords.get(48)));
- total+= calculateDistance(((TSPCoordinate) coords.get(38)), ((TSPCoordinate) coords.get(48)));
- total+= calculateDistance(((TSPCoordinate) coords.get(38)), ((TSPCoordinate) coords.get(37)));
- total+= calculateDistance(((TSPCoordinate) coords.get(40)), ((TSPCoordinate) coords.get(37)));
- total+= calculateDistance(((TSPCoordinate) coords.get(40)), ((TSPCoordinate) coords.get(39)));
- total+= calculateDistance(((TSPCoordinate) coords.get(36)), ((TSPCoordinate) coords.get(39)));
- total+= calculateDistance(((TSPCoordinate) coords.get(36)), ((TSPCoordinate) coords.get(35)));
- total+= calculateDistance(((TSPCoordinate) coords.get(34)), ((TSPCoordinate) coords.get(35)));
- total+= calculateDistance(((TSPCoordinate) coords.get(34)), ((TSPCoordinate) coords.get(44)));
- total+= calculateDistance(((TSPCoordinate) coords.get(46)), ((TSPCoordinate) coords.get(44)));
- total+= calculateDistance(((TSPCoordinate) coords.get(46)), ((TSPCoordinate) coords.get(16)));
- total+= calculateDistance(((TSPCoordinate) coords.get(29)), ((TSPCoordinate) coords.get(16)));
- total+= calculateDistance(((TSPCoordinate) coords.get(29)), ((TSPCoordinate) coords.get(50)));
- total+= calculateDistance(((TSPCoordinate) coords.get(20)), ((TSPCoordinate) coords.get(50)));
- total+= calculateDistance(((TSPCoordinate) coords.get(20)), ((TSPCoordinate) coords.get(23)));
- total+= calculateDistance(((TSPCoordinate) coords.get(30)), ((TSPCoordinate) coords.get(23)));
- total+= calculateDistance(((TSPCoordinate) coords.get(30)), ((TSPCoordinate) coords.get(2)));
- total+= calculateDistance(((TSPCoordinate) coords.get(7)), ((TSPCoordinate) coords.get(2)));
- total+= calculateDistance(((TSPCoordinate) coords.get(7)), ((TSPCoordinate) coords.get(42)));
- total+= calculateDistance(((TSPCoordinate) coords.get(21)), ((TSPCoordinate) coords.get(42)));
- total+= calculateDistance(((TSPCoordinate) coords.get(21)), ((TSPCoordinate) coords.get(17)));
- total+= calculateDistance(((TSPCoordinate) coords.get(3)), ((TSPCoordinate) coords.get(17)));
- total+= calculateDistance(((TSPCoordinate) coords.get(3)), ((TSPCoordinate) coords.get(18)));
- total+= calculateDistance(((TSPCoordinate) coords.get(31)), ((TSPCoordinate) coords.get(18)));
- total+= calculateDistance(((TSPCoordinate) coords.get(31)), ((TSPCoordinate) coords.get(22)));
-
- System.out.println("total...: "+total);
-    
-    
- }
- */
