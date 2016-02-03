@@ -5,7 +5,6 @@
  */
 package hs_tsp;
 
-import java.util.Vector;
 
 /**
  *
@@ -14,10 +13,13 @@ import java.util.Vector;
 public class Demo  {
     public static void main (String [] args) throws TSPException{
      HS_TSP hs = new HS_TSP("berlin52.tsp");
-     //hs.setPAR(0.2);
-     //hs.setHMCR(0.4);
-   // hs.generateHM(hs.getCoordVector());
+     hs.setPAR(0.45);
+     hs.setHMCR(0.95);
+     hs.setMaxIter(100);
+    hs.generateHM(hs.getCoordVector());
     hs.createCityNetwork(hs.getCoordVector());
+    
+    hs.start();
    
     }
     

@@ -63,6 +63,7 @@ public class TSPCoordinate {
         } else {
               //  System.out.println("Longest: "+longest+" and Distance: "+ distance);
             if (distance < longest) {
+               
                 Collections.sort(neighbors, new Comparator<TSPCoordinate>() {
 
                     @Override
@@ -88,7 +89,20 @@ public class TSPCoordinate {
             }
 
         }
-        System.out.println("Longest of the neighbors: "+ longest);
+       // System.out.println("Longest of the neighbors: "+ longest);
     }
 
+    
+    public TSPCoordinate getFromNeighbors(int index){
+    if(index>neighbors.size()){
+    System.out.println("Given index is out of range of neighbors list.");
+    return new TSPCoordinate(0, 0, 0);
+    }
+    else{
+    return neighbors.get(index);
+    
+    }
+    
+    
+    }
 }

@@ -16,7 +16,7 @@ public class TSPFileParser {
 
   private String fileName;
 
-  public TSPFileParser(int populationSize, int maxGenerations, int maxRuns, String fileName) throws TSPException {
+  public TSPFileParser(String fileName) throws TSPException {
 
     
     try {
@@ -39,7 +39,6 @@ public class TSPFileParser {
   public int getMaxRuns() { return this.maxRuns; }
   public boolean isTSPFileIn() { return this.isTSPFileIn; }
   public int [][] getGraph() { return this.graph; }
-  public double [][] cityValues = new double[populationSize][populationSize]; // population size değiştirilebilir?
   public Vector parseFile() throws TSPException {
 
     // Supported file types
@@ -47,6 +46,7 @@ public class TSPFileParser {
     int GEO    = 2;
 
     Vector coords = new Vector();
+    coords.add(new TSPCoordinate(0, 0, 0));
     int fileType = 0;
     
     try {
@@ -83,6 +83,7 @@ public class TSPFileParser {
              //   System.out.println(y);
 
 		coords.addElement(new TSPCoordinate(x,y,0));
+                  System.out.println("Size: "+coords.size());
 	      } else
 		throw new TSPException( "Unrecognized file format!" );
 	    } catch(NoSuchElementException e) {
